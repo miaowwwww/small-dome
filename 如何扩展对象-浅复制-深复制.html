@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		// 浅复制
+		function shallowCopy(destination, source) {
+			for( var prop in source ){
+				console.log(prop)
+				if(source.hasOwnProperty(prop)) {
+					console.log(prop);
+					destination[prop] = source[prop]
+				}
+			}
+			return destination;
+		}
+		var a = {
+			a: 'a'
+		}
+		var b = {
+			b: 'b'
+		}
+		shallowCopy(b, a);
+		console.log(b)
+
+		// 深复制
+		function deepCopy(destination, source) {
+			for(var prop in source) {
+				// 是否自己的属性
+				!source.hasOwnProperty(prop) && continue;
+
+				// 是否引用类型：object、array, 如果是function 也直接赋值
+				if((typeof source[prop]) !== 'object') {
+					destination[prop] = source[prop];
+				}
+				else {
+					destination[prop] = Object.prototype.toString.call(source[prop]) === '[object Array]' ? [] : {};
+
+					deepCopy(destination[prop], source[prop]);
+				}
+			}
+
+			return destination;
+		}
+
+		var a = {
+			arr: ['a', 'b', 'c'],
+			arrObj: [{o1: 'o1'}, {o2: 'o2'}],
+			obj: {
+				d: 'd',
+				innerObj: {
+					e: 'e'
+				}
+			},
+			func: function(c) {
+				console.log(c);
+			},
+			str: 'miaowwwww'
+		}
+
+		var b = deepCopy({}, a);
+		console.log(b);
+		console.log(JSON.stringify(b))
+	</script>
+</body>
+</html>
